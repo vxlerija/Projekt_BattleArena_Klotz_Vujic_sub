@@ -56,13 +56,10 @@ public class BattleArena {
 	}
 	
 	public void exchangeTurn() {
-		if(attacker == this.player1) {
-			attacker = this.player2;
-			defender = this.player1;
-		}else if(attacker == this.player2) {
-			attacker = this.player2;
-			defender = this.player1;
-		}	
+		BaseCharacter temp = attacker;
+	    attacker = defender;
+	    defender = temp;
+
 	}
 	
 	public void fight(int input) {
