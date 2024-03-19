@@ -67,18 +67,21 @@ public class BattleArena {
 		if(input == 1) {
 			attacker.attack(defender);
 			System.out.println(this.attacker.getName() + " caused damage" + "\n\t");
+			attacker.getDamage(input);
 			printPlayersStatus();
 			exchangeTurn();
 		}else if(input == 2 && attacker.isSpecialAbility() == false) {
 			attacker.specialAbilityActive();
 			attacker.setSpecialAbility(true);
 			System.out.println(this.attacker.getName() + " activated their special Ability: " + "\n\t");
+			attacker.getDamage(input);
 			printPlayersStatus();
 			exchangeTurn();
 		}else if(input == 3 && attacker.isSpecialAbility() == true) {
 			attacker.specialAbilityDeactive();
 			attacker.setSpecialAbility(false);
 			System.out.println(this.attacker.getName() + " deactivated their special Ability:" + "\n\t");
+			attacker.getDamage(input);
 			printPlayersStatus();
 			exchangeTurn();
 		}else {

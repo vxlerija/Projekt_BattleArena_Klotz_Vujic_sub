@@ -86,9 +86,7 @@ public static void main(String[] args) {
 		do {
 			inputCharacter = inputCharacter(sc, arena);
 			arena.fight(inputCharacter);
-			player1.getDamage(inputCharacter);
-			player2.getDamage(inputCharacter);
-			arena.electTheWinner();
+			//arena.electTheWinner();
 			
 		} while (player1.getLivingPoints() > 0 && player2.getLivingPoints() > 0);
 		
