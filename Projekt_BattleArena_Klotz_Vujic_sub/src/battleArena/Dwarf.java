@@ -2,68 +2,85 @@ package battleArena;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Dwarf extends BaseCharacter {
+public class Dwarf extends BaseCharacter{
+
 	public Dwarf(String name) {
 		super(name);
 	}
 
+	
+	
 	/**
 	 * calculates damage of Dwarf
 	 */
 	@Override
 	public void getDamage(int points) {
-	//setLivingPoints(getLivingPoints() - points);
+		this.livingPoints = this.livingPoints - points;
+		if(this.getLivingPoints() < 0) {
+			this.setLivingPoints(0);
+		}
 		
 	}
-
+	
+	
 	/**
-	 * method to attack the dwarfs enemy
+	 * attack method for Dwarf which refers to the method attackPossibilities
 	 */
 	@Override
 	public void attack(BaseCharacter enemy) {
-		this.setDamagePoints(ThreadLocalRandom.current().nextInt(15, 25 +1));
-		this.setDamagePoints(getDamagePoints());
-		enemy.setLivingPoints(getLivingPoints()-getDamagePoints());
+		int points = ThreadLocalRandom.current().nextInt(15, 25 +1);
+		if(this.isSpecialAbility()) {
+			if(this.attackPossibilities()== true) {
+				points = points*2;
+			}else {
+				points = points /2;
+			}
+		}
+		enemy.getDamage(points);
 	}
 
 	
 	/**
-	 * activates special ability of dwarf
+	 * activates special ability of Dwarf
 	 */
 	@Override
-	public void specialAbilityActive() {
-			if(this.getLivingPoints()<=50) {
-			this.setSpecialAbility(true);
-			int ranNumber = ThreadLocalRandom.current().nextInt(1, 10 + 1);
-			if(getLivingPoints() <= 50 && getLivingPoints() > 20 && 1 <= ranNumber && ranNumber >= 3) {
-				int i = ThreadLocalRandom.current().nextInt(15, 25 +1);
-				this.setDamagePoints(i*2);
-				//points = points*2;
-				//enemy.getDamage(points);
-			}else if(getLivingPoints() <= 20 && getLivingPoints() > 10 && 1 <= ranNumber && ranNumber >= 5) {
-				int i = ThreadLocalRandom.current().nextInt(15, 25 +1);
-				this.setDamagePoints(i*2);
-				//points = points*2;
-				//enemy.getDamage(points);
-			}else if(getLivingPoints() <= 10 && getLivingPoints() > 0 && 1 <= ranNumber && ranNumber >= 7) {
-				int i = ThreadLocalRandom.current().nextInt(15, 25 +1);
-				this.setDamagePoints(i*2);
-				//points = points*2;
-				//enemy.getDamage(points);
-			}else if(getLivingPoints() <= 50 && getLivingPoints() > 0 && 6 <= ranNumber && ranNumber >= 10) {
-				int i = ThreadLocalRandom.current().nextInt(15, 25 +1);
-				this.setDamagePoints(i/2);
-				//points = points/2;
-				//enemy.getDamage(points);
-				}
+	public boolean specialAbilityActive() {
+		if(getLivingPoints() < 50) {
 		}
+		return true;
 	}
 
 	/**
 	 * deactives special ability
 	 */
 	@Override
-	public void specialAbilityDeactive() {
-		this.setSpecialAbility(false);
+	public boolean specialAbilityDeactive() {
+		return false;
 	}
+	
+	/**
+	 * calculates probability of the success of the attack
+	 * @param points
+	 */
+	public boolean attackPossibilities() {
+		int points = ThreadLocalRandom.current().nextInt (1, 10 + 1);
+		if((this.getLivingPoints() <= 50) && (points <= 3)) {
+		return true;
+		}else if ((this.getLivingPoints() <- 20) && (points <= 5)){
+		return true;
+		}else if ((this.getLivingPoints() <- 10) && (points <=7)) {
+			return true;
+		}
+		return false;
+		
+		
+		
+	
+	}
+	
+	
+	
+	
+	
+
 }
