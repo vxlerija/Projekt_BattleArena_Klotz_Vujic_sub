@@ -2,7 +2,7 @@ package battleArena;
 
 public abstract class BaseCharacter {
 	private String name;
-	private int livingPoints;
+	protected int livingPoints;
 	private boolean specialAbility;
 	private int damagePoints;
 	
@@ -55,7 +55,7 @@ public abstract class BaseCharacter {
 	
 	public abstract void attack(BaseCharacter enemy);
 	
-	public abstract void specialAbilityActive();
+	public abstract boolean specialAbilityActive();
 	 
-	public abstract void specialAbilityDeactive();
+	public abstract boolean specialAbilityDeactive();
 }
