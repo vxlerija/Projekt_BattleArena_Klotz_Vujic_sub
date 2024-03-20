@@ -58,7 +58,7 @@ public class BattleArena {
 	 * @param defender
 	 */
 	public void simulateCombat(BaseCharacter attacker, BaseCharacter defender) {
-		System.out.println("It's" +attacker.getName() + "'s Turn");
+		System.out.println("It's" + attacker.getName() + "'s Turn");
 		System.out.println("Choose your mode!" +"\n" + "|1| attack \n"+"|2| activate special ability \n" + "|3| deactivate special ability \n");
 		System.out.println("Choice: ");
 		
