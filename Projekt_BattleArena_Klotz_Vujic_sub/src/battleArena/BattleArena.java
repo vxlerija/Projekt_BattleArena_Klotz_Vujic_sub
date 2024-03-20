@@ -1,16 +1,25 @@
 package battleArena;
 
-import java.util.Random;
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class BattleArena {
+	
+	Scanner sc = new Scanner(System.in);
 	private BaseCharacter player1;
 	private BaseCharacter player2;
 	private BaseCharacter winner;
 	
+	
+	
 	public BattleArena(BaseCharacter player1, BaseCharacter player2) {
 		this.player1 = player1;
 		this.player2 = player2;
-		this.winner = null;
+	}
+	
+	public BattleArena(Scanner sc) {
+		this.player1 = input(sc);
+		this.player2 = input(sc);
 	}
 
 	public BaseCharacter getPlayer1() {
@@ -40,64 +49,97 @@ public class BattleArena {
 	public BaseCharacter attacker;
 	public BaseCharacter defender;
 	
-	public void selectStarter() {
-		Random random = new Random();
 
-        while (player1.getLivingPoints()>0 && player2.getLivingPoints()>0) {
-            if (random.nextBoolean()) {
-                this.attacker = this.player1;
-                this.defender = this.player2;
-            } else {
-                this.attacker = this.player2;
-                this.defender = this.player1;
-            }
-            break;
-        }
-	}
-	
-	public void exchangeTurn() {
-		BaseCharacter temp = attacker;
-	    attacker = defender;
-	    defender = temp;
-
-	}
-	
-	public void fight(int input) {
+	/**
+	 * auxiliary method which lets the gamer decide for their mode, with the help of switch
+	 * different the possibilities are shown
+	 * simple gameplay
+	 * @param attacker
+	 * @param defender
+	 */
+	public void simulateCombat(BaseCharacter attacker, BaseCharacter defender) {
+		System.out.println("It's" +attacker.getName() + "'s Turn");
+		System.out.println("Choose your mode!" +"\n" + "|1| attack \n"+"|2| activate special ability \n" + "|3| deactivate special ability \n");
+		System.out.println("Choice: ");
 		
-		if(input == 1) {
+		int mode = sc.nextInt();
+		switch(mode) {
+		
+		case 1: 
+			System.out.println(attacker.getName() + " attacked");
 			attacker.attack(defender);
-			System.out.println(this.attacker.getName() + " caused damage" + "\n\t");
-			attacker.getDamage(input);
 			printPlayersStatus();
-			exchangeTurn();
-		}else if(input == 2 && attacker.isSpecialAbility() == false) {
+			break;
+		case 2:
+			System.out.println(attacker.getName() + " activated special ability");
 			attacker.specialAbilityActive();
-			attacker.setSpecialAbility(true);
-			System.out.println(this.attacker.getName() + " activated their special Ability: " + "\n\t");
-			attacker.getDamage(input);
 			printPlayersStatus();
-			exchangeTurn();
-		}else if(input == 3 && attacker.isSpecialAbility() == true) {
+			break;
+		case 3: 
+			System.out.println(attacker.getName() + " deactivated special ability");
 			attacker.specialAbilityDeactive();
-			attacker.setSpecialAbility(false);
-			System.out.println(this.attacker.getName() + " deactivated their special Ability:" + "\n\t");
-			attacker.getDamage(input);
 			printPlayersStatus();
-			exchangeTurn();
+			break;
+		default:
+			System.out.println("Something went wrong! Please try again!");
+			break;
+		}
+		if(defender.getLivingPoints()<=0) {
+			this.winner = attacker;
 		}else {
-			System.out.println("Only numbers from 1 to 3 accepted!" + "\n" + "Try again!");
+			this.winner = defender;
+		}
+	}	
+	
+	/**
+	 * method which lets the game go through by deciding for a random starter and for a winner in the end
+	 */
+	public void fight() {
+		int starter = ThreadLocalRandom.current().nextInt(1,2+1);
+		while(player1.getLivingPoints() > 0 && player2.getLivingPoints() > 0) {
+			if(starter == 1) {
+				simulateCombat(player1, player2);
+				starter=2;
+			}else {
+				simulateCombat(player2, player1);
+				starter = 1;
+			}
+		}
+		if(this.winner == player1) {
+			System.out.println("THE WINNER IS:" + this.player1.getName() + " CONGRATS!");
+		}else {
+			System.out.println("THE WINNER IS: " + this.player2.getName()+ " CONGRATS!");
 		}
 	}
 	
-	public void electTheWinner() {
-		if(this.attacker.getLivingPoints() <= 0) {
-			this.winner = this.defender;
-			System.out.println(this.winner.getName() + "won the game!Congrats");
-		}
-	}
-	
+	/**
+	 * prints out the current situation of each player
+	 */
 	public void printPlayersStatus() {
-		System.out.println(this.player1.getName() + " : \n" + " health = " + this.player1.getLivingPoints() + "\n special ability active = " + this.player1.isSpecialAbility() + 
-		"\n\n" + this.player2.getName() + " : \n" + " health = " + this.player2.getLivingPoints() + "\n special ability active = " + this.player2.isSpecialAbility()+ "\n");
+		System.out.println(this.player1.getName() + " : \n" + " livingPoints = " + this.player1.getLivingPoints() + "\n special ability active = " + this.player1.isSpecialAbility() 
+		+ "\n\n " + this.player2.getName() + " : \n" + " livingPoints = " + this.player2.getLivingPoints() + "\n special ability active = " + this.player2.isSpecialAbility()+ "\n");
+	}
+	
+	/**
+	 * lets gamer decide for their desired character and their names
+	 * @param sc
+	 * @return
+	 */
+	
+	public static BaseCharacter input(Scanner sc) {
+	System.out.println("Choose your Character!");
+	System.out.println("|1. Dragon|" + "\n" + "|2. Dwarf|");
+	System.out.print("Choice: ");
+	String characterChoice = sc.nextLine();
+	System.out.println();
+	System.out.println("Name your chosen character: ");
+	String name = sc.nextLine();
+	
+	switch(characterChoice) {
+	case "1": return new Dragon(name);
+	case "2": return new Dwarf(name);
+	default: return null;
+	}
+	
 	}
 }
