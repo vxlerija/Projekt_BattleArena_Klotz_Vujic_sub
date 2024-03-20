@@ -130,14 +130,21 @@ public class BattleArena {
 	System.out.println("Choose your Character!");
 	System.out.println("|1. Dragon|" + "\n" + "|2. Dwarf|");
 	System.out.print("Choice: ");
-	String characterChoice = sc.nextLine();
+	int characterChoice = sc.nextInt();
 	System.out.println();
-	System.out.println("Name your chosen character: ");
-	String name = sc.nextLine();
+	System.out.print("Name your ");
+	String name = "";
+	    if (characterChoice == 1) {
+	        System.out.println("Dragon: ");
+	    } else if (characterChoice == 2) {
+	        System.out.println("Dwarf: ");
+	    }
+	    sc.nextLine(); 
+	    String name1 = sc.nextLine();
 	
 	switch(characterChoice) {
-	case "1": return new Dragon(name);
-	case "2": return new Dwarf(name);
+	case 1: return new Dragon(name1);
+	case 2: return new Dwarf(name1);
 	default: return null;
 	}
 	
